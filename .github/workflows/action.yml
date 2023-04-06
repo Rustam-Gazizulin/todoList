@@ -22,6 +22,7 @@ jobs:
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
 
     steps:
       - name: clone code

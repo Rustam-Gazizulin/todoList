@@ -1,4 +1,5 @@
 version: '3.7'
+
 services:
   frontend:
     image: sermalenk/skypro-front:lesson-34

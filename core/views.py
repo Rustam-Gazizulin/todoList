@@ -36,4 +36,12 @@ class ProfileView(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class UpdatePasswordView(generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.UpdatePasswordSerializers
+
+    def get_object(self):
+        return self.request.user
+
+
 

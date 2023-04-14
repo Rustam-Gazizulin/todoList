@@ -51,3 +51,9 @@ class LoginSerializers(serializers.ModelSerializer):
     class Meta:
         model = USER_MODEL
         fields = '__all__'
+
+
+class ProfileSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = USER_MODEL
+        fields = ('id', 'username', 'first_name', 'last_name', 'email')

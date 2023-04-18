@@ -23,6 +23,8 @@ jobs:
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+      SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }}
+      SOCIAL_AUTH_VK_OAUTH2_SECRET: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }}
 
     steps:
       - name: clone code

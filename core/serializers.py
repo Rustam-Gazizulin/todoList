@@ -59,7 +59,9 @@ class ProfileSerializers(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'email')
 
 
+#  Создаем сериалайзер без привязки к модели
 class UpdatePasswordSerializers(serializers.Serializer):
+    #  Вытягиваем данные пользователя из request
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     old_password = serializers.CharField(required=True, write_only=True)
     new_password = serializers.CharField(required=True, write_only=True)

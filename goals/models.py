@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 
 from core.models import User
 
@@ -10,7 +9,7 @@ class GoalCategory(models.Model):
         verbose_name_plural = "Категории"
 
     title = models.CharField(verbose_name="Название", max_length=255)
-    user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
+    user = models.ForeignKey('core.User', verbose_name="Автор", on_delete=models.PROTECT)
     is_deleted = models.BooleanField(verbose_name="Удалена", default=False)
     created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated = models.DateTimeField(auto_now=True, verbose_name="Дата последнего обновления")
@@ -31,7 +30,7 @@ class Goal(models.Model):
         critical = 4, "Критический"
 
     title = models.CharField(verbose_name='Название', max_length=255)
-    description = models.TextField(verbose_name='Описание', null=True, blank=True)
+    description = models.TextField(verbose_name='Описание')
     status = models.PositiveSmallIntegerField(
         verbose_name="Статус",
         choices=Status.choices,
@@ -58,3 +57,17 @@ class Goal(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated = models.DateTimeField(auto_now=True, verbose_name="Дата последнего обновления")
+
+
+class GoalComment(models.Model):
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    text = models.TextField(verbose_name='Текст')
+    goal = models.ForeignKey(Goal, verbose_name='Цель', on_delete=models.PROTECT, related_name='comments')
+
+    user = models.ForeignKey('core.User', verbose_name='Пользователь', on_delete=models.PROTECT, related_name='users')
+    created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    updated = models.DateTimeField(auto_now=True, verbose_name="Дата последнего обновления")
+

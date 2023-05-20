@@ -6,14 +6,14 @@ from rest_framework.pagination import LimitOffsetPagination
 
 from goals.filters import GoalDateFilter
 from goals.models import GoalCategory, Goal, GoalComment, Board
-from goals.permissions import BoardPermissions
+from goals.permissions import BoardPermissions, GoalCategoryPermissions
 from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalCategoryCreateSerializer, \
     GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer, BoardSerializer, BoardCreateSerializer
 
 
 class GoalCategoryCreateView(CreateAPIView):
     model = GoalCategory
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, GoalCategoryPermissions]
     serializer_class = GoalCategoryCreateSerializer
 
 
@@ -28,21 +28,24 @@ class GoalCategoryListView(ListAPIView):
     ]
     ordering_fields = ["title", "created"]
     ordering = ["title"]
-    search_fields = ["title"]
+    search_fields = ["title", "board"]
 
     def get_queryset(self):
         return GoalCategory.objects.filter(
-            user=self.request.user, is_deleted=False
+            board__participants__user=self.request.user,
+            is_deleted=False
         )
 
 
 class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     model = GoalCategory
     serializer_class = GoalCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, GoalCategoryPermissions]
 
     def get_queryset(self):
-        return GoalCategory.objects.filter(user=self.request.user, is_deleted=False)
+        return GoalCategory.objects.filter(board__participants__user=self.request.user,
+                                           is_deleted=False
+                                           )
 
     def perform_destroy(self, instance):
         instance.is_deleted = True
@@ -142,8 +145,9 @@ class BoardView(RetrieveUpdateDestroyAPIView):
 
 
 class BoardCreateView(CreateAPIView):
+    model = Board
     serializer_class = BoardCreateSerializer
-    permission_classes = [BoardPermissions]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class BoardListView(ListAPIView):
